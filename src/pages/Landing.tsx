@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Phone, Upload, Timer, ChevronDown, MessagesSquare } from 'lucide-react';
-import bgImage from '@/assets/bg.png'; // Import the spiral background
+import bgImage from '@/assets/bg.png';
 import phoneVideo from '@/assets/bw revolving blob.mp4';
 import uploadVideo from '@/assets/uploadfiles.mp4';
 import startInterviewVideo from '@/assets/startinterview.mp4';
@@ -32,11 +32,12 @@ export default function Landing() {
           Master every round with AI-powered interview prep.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 min-[400px]:flex-row justify-center">
-            <Link to="/signup">
-              <Button size="lg" className="w-full min-[400px]:w-auto bg-black text-white hover:bg-black/90 text-lg px-8">
-                Start Practicing
-              </Button>
-            </Link>
+          <Link to="/signup">
+            <Button size="lg" className="w-full min-[400px]:w-auto bg-black/100 backdrop-blur-3xl border border-white/10 text-white hover:bg-black/80 text-lg px-8 shadow-lg">
+              Start Practicing
+            </Button>
+          </Link>
+
           </div>
         </div>
         <div className="absolute bottom-10 animate-bounce text-gray-500">
@@ -51,7 +52,7 @@ export default function Landing() {
           {detailedFeatures.map((feature, index) => (
             <div
               key={index}
-              className={`flex flex-col md:flex-row items-center md:py-16 text-left ${
+              className={`flex flex-col md:flex-row items-center md:py-16 text-center ${
                 index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
               }`}
             >
@@ -61,7 +62,7 @@ export default function Landing() {
                   className={`relative ${feature.enlarged ? 'scale-125' : feature.small ? 'scale-75' : ''}`}
                   style={{ transformOrigin: 'center' }}
                 >
-                  <video className="w-full max-w-sm h-48 rounded-xl" autoPlay loop muted>
+                  <video className="w-full max-w-lg h-52 rounded-2xl" autoPlay loop muted>
                     <source src={feature.media} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -70,7 +71,7 @@ export default function Landing() {
 
               {/* Feature Text */}
               <div className="w-full md:w-1/2 px-6">
-                <h3 className="text-2xl font-bold">{feature.title}</h3>
+                <h3 className="text-3xl font-bold">{feature.title}</h3>
                 <p className="text-gray-700 mt-2">{feature.description}</p>
               </div>
             </div>
