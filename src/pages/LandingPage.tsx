@@ -2,9 +2,8 @@
 import Header from "@/components/header";
 import HeroSection from "@/components/hero-section";
 import Navbar from "@/components/Navbar";
-import Features from "@/components/sections/features";
-import Logos from "@/components/sections/logos";
-import Main from "@/components/sections/main-section";
+import Features from "@/components/features";
+import Main from "@/components/main-section";
 
 const LandingPage = () => {
   return (
@@ -17,10 +16,6 @@ const LandingPage = () => {
             <HeroSection />
           </Header>
         </div>
-      </div>
-      
-      <div>
-        <Logos/>
       </div>
 
       <div className="relative">

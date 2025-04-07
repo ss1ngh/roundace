@@ -39,7 +39,6 @@ function App() {
           >
           </Route>
 
-          {/* Catch all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
