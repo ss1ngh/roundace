@@ -1,6 +1,8 @@
 import { navigationLinks } from "@/utils/content"
+import { Navigate, useNavigate } from "react-router-dom"
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <nav className="bg-transparent text-gray-200 m-auto flex max-w-[90rem] justify-between items-center px-4 py-1 text-lg/8 font-light">
         <a href="#" className="flex items-center gap-x-3 font-mono z-10">
@@ -21,8 +23,12 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-x-3 z-10">
-          <button className="hover:text-white transition-all cursor-pointer px-2 py-1 font-mono">Login</button>
-          <button className="border border-white/20 hover:text-white bg-white/20 hover:border-white/10 
+          <button 
+          onClick={() => navigate("/signin")}
+          className="hover:text-white transition-all cursor-pointer px-2 py-1 font-mono">Login</button>
+          <button 
+          onClick={() => navigate("/signup")}
+          className="border border-white/20 hover:text-white bg-white/20 hover:border-white/10 
                             backdrop-blur-lg rounded-3xl px-3 py-1 flex items-center w-fit gap-x-2
                             font-mono transition-all">Get Started</button>
         </div>
