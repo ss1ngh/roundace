@@ -30,8 +30,7 @@ export default function FAQList({
   return (
     <motion.ul
       className="m-auto flex max-w-[51.625rem] flex-col gap-y-14 max-lg:gap-y-12"
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
+      animate={inView ? "visible" : "visible"}
       key={category}
       layout
       variants={{

@@ -21,7 +21,9 @@ const FAQs = () => {
   };
 
   return (
-    <section className="justify items-center">
+    <section className="relative isolate overflow-hidden">
+      <div className="absolute inset-0 -z-10 rounded-t-[2rem] 
+              bg-[linear-gradient(to_top,_transparent_50%,_#4f46e5_80%,_#8f68f3_100%)]" />
       <div className="w-full max-w-[90rem] py-28">
         <h2 className="text-center text-slate-300 text-6xl/normal font-semibold tracking-tighter mb-4">
           Frequently Asked Questions
@@ -36,9 +38,8 @@ const FAQs = () => {
             <li key={obj.id}>
               <button
                 onClick={() => handleCategoryClick(obj.category)}
-                className={`border border-white/20 bg-white/10 hover:text-white backdrop-blur-lg rounded-3xl px-8 py-3.5 flex items-center w-fit gap-x-2 font-mono ${
-                  obj.category === category && "border-white"
-                }`}
+                className={`border border-white/20 bg-white/10 hover:text-white hover:bg-white/20 backdrop-blur-lg rounded-3xl px-8 py-3.5 flex items-center w-fit gap-x-2 font-mono ${
+                  obj.category === category}`}
               >
                 {obj.category}
               </button>
