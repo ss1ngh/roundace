@@ -12,7 +12,7 @@ import SignUpPage from './pages/SignUpPage';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-[#010215]">
         <Routes>
           {/* public routes */}
           <Route path="/" element={<PublicLayout />}>
