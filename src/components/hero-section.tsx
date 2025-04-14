@@ -8,7 +8,7 @@ const HeroSection = () => {
   return (
     <div className="relative isolate overflow-hidden">
       
-      <div className="absolute inset-0 -z-10 rounded-b-[2rem] bg-[linear-gradient(to_bottom,_transparent_50%,_#4f46e5_80%,_#93c5fd_100%)]" />
+      <div className="absolute inset-0 -z-10 rounded-b-[2rem] bg-[linear-gradient(to_bottom,_transparent_50%,_#4f46e5_80%,_#8f68f3_100%)]" />
 
       <div className="m-auto grid max-w-[90rem] grid-cols-[5fr_4fr] items-center gap-x-12 px-24 py-20">
         <div>
@@ -21,7 +21,7 @@ const HeroSection = () => {
           </p>
           <button
             onClick={() => navigate("/signup")}
-            className="text-white border border-white/30 bg-white/20 hover:bg-white/30 
+            className="text-white border border-white/30 bg-white/30 hover:bg-white/20 
                       hover:border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center w-fit gap-x-2
                       transition-all"
           >
