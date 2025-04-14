@@ -21,7 +21,7 @@ export default function FAQ({ question, activeQuestion, handleQuestionClick }: F
     visible: { opacity: 1, y: 0 },
   };
   
-  const Icon = question.Icon; // Correctly reference the icon component
+  const Icon = question.Icon;
   
   return (
     <motion.li variants={itemVariants} className="shrink-0 grow-0">
