@@ -8,7 +8,7 @@ const Features = () => {
       <div
         className="absolute inset-0 -z-10 rounded-[2rem]"
         style={{
-          background: 'linear-gradient(to top, #4f46e5 80%, #8f68f3 100%)',
+          background: 'linear-gradient(to top, #5248e7 10% ,#3f38bc 80%, #8f68f3 100%)',
         }}
       />
 
