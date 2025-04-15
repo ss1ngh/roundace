@@ -25,18 +25,18 @@ const navigationLinks = [
   },
   {
     id: 2,
-    link: "Pricing",
-    href: "#",
+    link: "Features",
+    href: "#features",
   },
   {
     id: 3,
-    link: "About",
-    href: "#",
+    link: "FAQs",
+    href: "#faqs",
   },
   {
     id: 4,
-    link: "Community",
-    href: "#",
+    link: "Pricing",
+    href: "#pricing",
   },
 ];
 

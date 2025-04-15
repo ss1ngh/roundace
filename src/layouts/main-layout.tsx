@@ -6,9 +6,9 @@ const MainLayout = () => {
   return (
     <div className="flex flex-col h-screen">
         <Header/>
-
-        <Outlet/>
-
+        <main>        
+          <Outlet/>
+        </main>
         <Footer/>
     </div>
   )

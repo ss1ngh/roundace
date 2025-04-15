@@ -21,7 +21,7 @@ const FAQs = () => {
   };
 
   return (
-    <section className="relative isolate overflow-hidden">
+    <section id="faqs" className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10 rounded-t-[2rem] 
               bg-[linear-gradient(to_top,_transparent_50%,_#4f46e5_80%,_#8f68f3_100%)]" />
       <div className="w-full max-w-[90rem] py-28">

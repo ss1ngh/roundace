@@ -8,6 +8,7 @@ import ProtectRoutes from './layouts/protected-layout';
 import LandingPage from '@/pages/LandingPage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import Dashboard from './components/dashboard';
 
 function App() {
   return (
@@ -37,8 +38,10 @@ function App() {
               </ProtectRoutes>
             }
           >
+            <Route index element={<Dashboard />} />
           </Route>
 
+          {/* redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
