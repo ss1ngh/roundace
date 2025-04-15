@@ -2,7 +2,7 @@ import SampleImage from '@/assets/sample-image.jpg';
 
 const Features = () => {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section id='features' className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-20 rounded-[2rem] border border-white/40" />
 
       <div
@@ -12,14 +12,12 @@ const Features = () => {
         }}
       />
 
-      {/* Inner content (padded) */}
       <div className="relative m-auto max-w-[90rem] px-24 py-24 z-10">
         <h2 className="text-center text-slate-300 text-6xl/normal font-semibold tracking-tighter mb-32">
           Everything You Need to <br />
           <span className="text-white">Supercharge </span> Your Interview Prep
         </h2>
 
-        {/* Feature 1 */}
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>
             <img
@@ -36,7 +34,6 @@ const Features = () => {
           </div>
         </div>
 
-        {/* Feature 2 */}
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <div className="max-w-lg justify-self-start">
             <p className="text-slate-200 mb-12 text-4xl/8 font-semibold tracking-tighter">Upload JD in one click</p>
@@ -53,7 +50,6 @@ const Features = () => {
           </figure>
         </div>
 
-        {/* Feature 3 */}
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>
             <img

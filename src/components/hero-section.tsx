@@ -1,8 +1,10 @@
 import { ArrowRight } from "lucide-react"
 import heroImage from "@/assets/sample-image.jpg"
 import { useNavigate } from "react-router-dom"
+import { useUser } from "@clerk/clerk-react";
 
 const HeroSection = () => {
+  const {isSignedIn, isLoaded, user} = useUser();
   const navigate = useNavigate();
 
   return (
@@ -19,7 +21,18 @@ const HeroSection = () => {
             Practice with AI, receive instant feedback, <br />
             and continuously improve your performance
           </p>
-          <button
+          {isLoaded && isSignedIn ? (
+            <button
+            onClick={() => navigate("/dashboard")}
+            className="text-white border border-white/30 bg-white/30 hover:bg-white/20 
+                      hover:border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center w-fit gap-x-2
+                      transition-all"
+          >
+            <p className="px-2 font-mono">Take an Interview</p>
+            <ArrowRight />
+            </button>
+          ) : (
+            <button
             onClick={() => navigate("/signup")}
             className="text-white border border-white/30 bg-white/30 hover:bg-white/20 
                       hover:border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center w-fit gap-x-2
@@ -28,6 +41,7 @@ const HeroSection = () => {
             <p className="px-2 font-mono">Get Started</p>
             <ArrowRight />
           </button>
+          )}
         </div>
 
         <div>

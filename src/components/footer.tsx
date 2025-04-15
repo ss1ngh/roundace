@@ -12,7 +12,6 @@ type FooterColumn = {
 export default function Footer(): JSX.Element {
   return (
     <>
-      {/* ⚡ Glowy Centered Line */}
       <div className="relative mx-auto mt-10 h-[2px] w-8/12 bg-slate-700/60 rounded-full">
         <div className="absolute left-1/2 top-1/2 h-[6px] w-72 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-xl opacity-90" />
       </div>
@@ -23,7 +22,7 @@ export default function Footer(): JSX.Element {
             <a className="flex items-center gap-x-3 max-md:gap-x-2" href="#">
               {/* <Logo 
                 className="stroke-slate-300 h-6" 
-                alt="RoundAce Logo Icon" 
+                alt="RoundAce Logo" 
                 width={5} 
               /> */}
               <p className="text-slate-300 text-xl font-bold tracking-tight max-md:text-lg/8 max-md:tracking-tighter">
