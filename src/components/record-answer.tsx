@@ -25,8 +25,12 @@ import {
   query,
   serverTimestamp,
   where,
+  getDoc,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
+import { debounce } from "lodash";
 
 interface RecordAnswerProps {
   question: { question: string; answer: string };
@@ -50,9 +54,14 @@ export const RecordAnswer = ({
     results,
     startSpeechToText,
     stopSpeechToText,
+    error: speechError, // Add speech-to-text error handling
   } = useSpeechToText({
     continuous: true,
     useLegacyResults: false,
+    speechRecognitionProperties: {
+      interimResults: true,
+      lang: "en-US",
+    },
   });
 
   const [userAnswer, setUserAnswer] = useState("");
@@ -64,7 +73,16 @@ export const RecordAnswer = ({
   const { userId } = useAuth();
   const { interviewId } = useParams();
 
-  const recordUserAnswer = async () => {
+  // Handle webcam errors
+  const handleWebcamError = (error: string | DOMException) => {
+    console.error("Webcam error in RecordAnswer:", error);
+    setIsWebCam(false);
+    toast.error("Webcam Error", {
+      description: "Failed to access webcam. Please ensure you have granted permissions and try again.",
+    });
+  };
+
+  const recordUserAnswer = debounce(async () => {
     if (isRecording) {
       stopSpeechToText();
 
@@ -72,7 +90,15 @@ export const RecordAnswer = ({
         toast.error("Error", {
           description: "Your answer should be more than 30 characters",
         });
+        return;
+      }
 
+      const cacheKey = `${interviewId}-${question.question}-${userAnswer}`;
+      const cacheDoc = await getDoc(doc(db, 'cachedFeedback', cacheKey));
+      if (cacheDoc.exists()) {
+        console.log('Using cached AI feedback');
+        setAiResult(cacheDoc.data() as AIResponse);
+        setIsAiGenerating(false);
         return;
       }
 
@@ -82,11 +108,16 @@ export const RecordAnswer = ({
         userAnswer
       );
 
+      await setDoc(doc(db, 'cachedFeedback', cacheKey), {
+        ...aiResult,
+        createdAt: serverTimestamp(),
+      });
+
       setAiResult(aiResult);
     } else {
       startSpeechToText();
     }
-  };
+  }, 1000);
 
   const cleanJsonResponse = (responseText: string) => {
     let cleanText = responseText.trim();
@@ -114,9 +145,9 @@ export const RecordAnswer = ({
     `;
   
     try {
-      const responseText = await generateAIContent(prompt); // Call your updated Gemini function
-      const result: AIResponse = cleanJsonResponse(responseText); // Use a new variable name here
-      
+      console.log(`Generating AI feedback at ${new Date().toISOString()}`);
+      const responseText = await generateAIContent(prompt);
+      const result: AIResponse = cleanJsonResponse(responseText);
       return result;
     } catch (error) {
       console.log(error);
@@ -195,6 +226,16 @@ export const RecordAnswer = ({
     setUserAnswer(combineTranscripts);
   }, [results]);
 
+  // Log speech-to-text errors
+  useEffect(() => {
+    if (speechError) {
+      console.error("Speech-to-text error:", speechError);
+      toast.error("Speech Recognition Error", {
+        description: "Failed to detect speech. Please ensure your microphone is enabled and permissions are granted.",
+      });
+    }
+  }, [speechError]);
+
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4 px-4 md:px-8">
       <SaveModal
@@ -207,9 +248,17 @@ export const RecordAnswer = ({
       <div className="w-full max-w-md h-[400px] flex items-center justify-center border border-white/10 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-lg shadow-inner shadow-black/10">
         {isWebCam ? (
           <WebCam
-            onUserMedia={() => setIsWebCam(true)}
-            onUserMediaError={() => setIsWebCam(false)}
+            onUserMedia={() => {
+              console.log("Webcam access granted in RecordAnswer");
+              setIsWebCam(true);
+            }}
+            onUserMediaError={handleWebcamError}
             className="w-full h-full object-cover rounded-2xl"
+            videoConstraints={{
+              width: 1280,
+              height: 720,
+              facingMode: "user",
+            }}
           />
         ) : (
           <WebcamIcon className="w-24 h-24 text-muted-foreground" />
@@ -239,12 +288,14 @@ export const RecordAnswer = ({
             )
           }
           onClick={recordUserAnswer}
+          disabled={isAiGenerating}
         />
 
         <TooltipButton
           content="Record Again"
           icon={<RefreshCw className="w-5 h-5" />}
           onClick={recordNewAnswer}
+          disabled={isAiGenerating}
         />
 
         <TooltipButton
@@ -257,7 +308,7 @@ export const RecordAnswer = ({
             )
           }
           onClick={() => setOpen(!open)}
-          disbaled={!aiResult}
+          disabled={!aiResult || isAiGenerating}
         />
       </div>
 

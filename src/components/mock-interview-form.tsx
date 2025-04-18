@@ -21,6 +21,7 @@ import { Loader } from "lucide-react";
 import { db } from "@/config/firebase.config";
 import { addDoc, collection, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { generateAIContent } from "@/scripts";
+import { debounce } from "lodash";
 
 interface FormMockInterviewProps {
   initialData: Interview | null;
@@ -102,24 +103,31 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     ? { title: "Updated..!", description: "Changes saved successfully..." }
     : { title: "Created..!", description: "New Mock Interview created..." };
 
-  const onSubmit = async (data: FormData) => {
+  const debouncedSubmit = debounce(async (data: FormData) => {
     try {
       setLoading(true);
 
       let aiResult;
       try {
+        console.log(`Submitting form at ${new Date().toISOString()}`);
         aiResult = await generateAiResponse(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error('AI Generation error:', error);
-        toast.error('AI Generation failed', {
-          description: 'Please try again in a few moments',
-        });
+        if (error.message.includes('Rate limit')) {
+          toast.error('Rate Limit Exceeded', {
+            description: 'Too many requests to the AI service. Please wait a minute and try again.',
+          });
+        } else {
+          toast.error('AI Generation Failed', {
+            description: 'Unable to generate interview questions. Please try again later.',
+          });
+        }
         return;
       }
 
       if (!aiResult || !Array.isArray(aiResult)) {
-        toast.error('Invalid AI response', {
-          description: 'Please try again',
+        toast.error('Invalid AI Response', {
+          description: 'Please try again.',
         });
         return;
       }
@@ -130,17 +138,18 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
           ...data,
           updatedAt: serverTimestamp(),
         });
+        navigate(`/generate/interview/${initialData.id}/load`, { replace: true }); // Navigate to InterviewLoadPage after update
       } else {
-        await addDoc(collection(db, "interviews"), {
+        const newInterviewRef = await addDoc(collection(db, "interviews"), {
           ...data,
           userId,
           questions: aiResult,
           createdAt: serverTimestamp(),
         });
+        navigate(`/generate/interview/${newInterviewRef.id}/load`, { replace: true }); // Navigate to InterviewLoadPage after creation
       }
 
       toast(toastMessage.title, { description: toastMessage.description });
-      navigate("/generate", { replace: true });
     } catch (error) {
       console.error('Form submission error:', error);
       toast.error('Error', {
@@ -149,6 +158,10 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     } finally {
       setLoading(false);
     }
+  }, 1000);
+
+  const onSubmit = (data: FormData) => {
+    debouncedSubmit(data);
   };
 
   useEffect(() => {

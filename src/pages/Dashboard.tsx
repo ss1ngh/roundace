@@ -1,5 +1,5 @@
 import { Plus, Clock, Calendar, BarChart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate
 import { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
@@ -12,6 +12,7 @@ export const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [loading, setLoading] = useState(false);
   const { userId } = useAuth();
+  const navigate = useNavigate(); // Add useNavigate for navigation
 
   useEffect(() => {
     if (!userId) return;
@@ -44,9 +45,13 @@ export const Dashboard = () => {
     return () => unsubscribe();
   }, [userId]);
 
-  
-  const totalPracticeTime = interviews.length * 0.5; 
+  const totalPracticeTime = interviews.length * 0.5;
   const totalQuestions = interviews.reduce((acc, curr) => acc + curr.questions.length, 0);
+
+  // Add handler to navigate to InterviewLoadPage
+  const handleInterviewClick = (interviewId: string) => {
+    navigate(`/generate/interview/${interviewId}/load`);
+  };
 
   return (
     <div className="min-h-screen bg-black relative isolate overflow-hidden">
@@ -119,9 +124,12 @@ export const Dashboard = () => {
         ) : interviews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {interviews.map((interview) => (
-              <div key={interview.id} 
-                   className="border border-white/10 bg-white/5 backdrop-blur-lg rounded-xl p-6
-                            hover:bg-white/10 transition-all cursor-pointer">
+              <div
+                key={interview.id}
+                className="border border-white/10 bg-white/5 backdrop-blur-lg rounded-xl p-6
+                         hover:bg-white/10 transition-all cursor-pointer"
+                onClick={() => handleInterviewClick(interview.id)} // Add onClick handler
+              >
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-slate-200 font-semibold">{interview.position}</h3>
                   <span className="px-3 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">
@@ -131,7 +139,7 @@ export const Dashboard = () => {
                 <p className="text-slate-400 text-sm mb-4">{interview.techStack}</p>
                 <div className="flex items-center gap-2">
                   <div className="h-2 flex-1 bg-white/10 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
                       style={{ width: `${(interview.questions.length / 10) * 100}%` }}
                     />

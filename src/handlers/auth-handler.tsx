@@ -4,14 +4,10 @@ import { User } from "@/types";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
-const AuthHanlder = () => {
+const AuthHandler = () => {
   const { isSignedIn } = useAuth();
   const { user } = useUser();
-
-  const pathname = useLocation().pathname;
-  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -20,8 +16,8 @@ const AuthHanlder = () => {
       if (isSignedIn && user) {
         setLoading(true);
         try {
-          const userSanp = await getDoc(doc(db, "users", user.id));
-          if (!userSanp.exists()) {
+          const userSnap = await getDoc(doc(db, "users", user.id));
+          if (!userSnap.exists()) {
             const userData: User = {
               id: user.id,
               name: user.fullName || user.firstName || "Anonymous",
@@ -34,7 +30,7 @@ const AuthHanlder = () => {
             await setDoc(doc(db, "users", user.id), userData);
           }
         } catch (error) {
-          console.log("Error on storing the user data : ", error);
+          console.log("Error on storing the user data: ", error);
         } finally {
           setLoading(false);
         }
@@ -42,7 +38,7 @@ const AuthHanlder = () => {
     };
 
     storeUserData();
-  }, [isSignedIn, user, pathname, navigate]);
+  }, [isSignedIn, user]); // Removed pathname and navigate
 
   if (loading) {
     return <LoaderPage />;
@@ -51,4 +47,4 @@ const AuthHanlder = () => {
   return null;
 };
 
-export default AuthHanlder;
+export default AuthHandler;
