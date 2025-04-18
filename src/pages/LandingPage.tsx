@@ -1,12 +1,28 @@
 // src/pages/LandingPage.tsx
 import Header from "@/sections/header";
 import HeroSection from "@/sections/hero-section";
-import Navbar from "@/sections/Navbar";
+import Navbar from "@/components/Navbar";
 import Features from "@/sections/features";
 import Main from "@/sections/main-section";
 import FAQs from "@/sections/faqs/FAQs";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const LandingPage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const el = document.getElementById(id);
+      if (el) {
+        // small timeout in case transition/page load is async
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 50);
+      }
+    }
+  }, [location]);
   return (
     <div className="min-h-screen relative">
       <div className="relative">

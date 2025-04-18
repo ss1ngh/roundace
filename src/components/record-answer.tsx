@@ -54,7 +54,7 @@ export const RecordAnswer = ({
     results,
     startSpeechToText,
     stopSpeechToText,
-    error: speechError, // Add speech-to-text error handling
+    error: speechError,
   } = useSpeechToText({
     continuous: true,
     useLegacyResults: false,
@@ -73,7 +73,6 @@ export const RecordAnswer = ({
   const { userId } = useAuth();
   const { interviewId } = useParams();
 
-  // Handle webcam errors
   const handleWebcamError = (error: string | DOMException) => {
     console.error("Webcam error in RecordAnswer:", error);
     setIsWebCam(false);
@@ -86,9 +85,9 @@ export const RecordAnswer = ({
     if (isRecording) {
       stopSpeechToText();
 
-      if (userAnswer?.length < 30) {
+      if (userAnswer?.length < 10) {
         toast.error("Error", {
-          description: "Your answer should be more than 30 characters",
+          description: "Your answer should be more than 10 characters",
         });
         return;
       }
@@ -226,7 +225,6 @@ export const RecordAnswer = ({
     setUserAnswer(combineTranscripts);
   }, [results]);
 
-  // Log speech-to-text errors
   useEffect(() => {
     if (speechError) {
       console.error("Speech-to-text error:", speechError);
@@ -237,7 +235,7 @@ export const RecordAnswer = ({
   }, [speechError]);
 
   return (
-    <div className="w-full flex flex-col items-center gap-8 mt-4 px-4 md:px-8">
+    <div className="w-full flex flex-col gap-6 px-4 md:px-8">
       <SaveModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -245,55 +243,84 @@ export const RecordAnswer = ({
         loading={loading}
       />
 
-      <div className="w-full max-w-md h-[400px] flex items-center justify-center border border-white/10 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-lg shadow-inner shadow-black/10">
-        {isWebCam ? (
-          <WebCam
-            onUserMedia={() => {
-              console.log("Webcam access granted in RecordAnswer");
-              setIsWebCam(true);
-            }}
-            onUserMediaError={handleWebcamError}
-            className="w-full h-full object-cover rounded-2xl"
-            videoConstraints={{
-              width: 1280,
-              height: 720,
-              facingMode: "user",
-            }}
-          />
-        ) : (
-          <WebcamIcon className="w-24 h-24 text-muted-foreground" />
-        )}
+      <div className="w-full flex flex-col md:flex-row gap-6 py-2">
+        {/* Webcam */}
+        <div className="w-full md:w-1/2 flex justify-center">
+          <div className="w-full max-w-xs h-[250px] flex items-center justify-center border border-white/10 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-lg shadow-inner shadow-black/10">
+            {isWebCam ? (
+              <WebCam
+                onUserMedia={() => {
+                  console.log("Webcam access granted in RecordAnswer");
+                  setIsWebCam(true);
+                }}
+                onUserMediaError={handleWebcamError}
+                className="w-full h-full object-cover rounded-2xl"
+                videoConstraints={{
+                  width: 1280,
+                  height: 720,
+                  facingMode: "user",
+                }}
+              />
+            ) : (
+              <WebcamIcon className="w-24 h-24 text-muted-foreground" />
+            )}
+          </div>
+        </div>
+
+        {/* Answer */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center gap-4">
+          <div className="w-full max-w-md h-[200px] overflow-y-auto border border-white/10 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-lg shadow-md shadow-black/20 p-6">
+            <h2 className="text-xl font-semibold text-white mb-2">
+              Your Answer
+            </h2>
+
+            <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">
+              {userAnswer || "🎙️ Start recording to see your answer here..."}
+            </p>
+
+            {interimResult && (
+              <p className="text-sm text-gray-400 mt-4">
+                <strong>Current Speech:</strong> {interimResult}
+              </p>
+            )}
+          </div>
+        </div>
+
+        
       </div>
 
+      {/* Buttons */}
       <div className="flex flex-wrap justify-center gap-4">
         <TooltipButton
           content={isWebCam ? "Turn Off" : "Turn On"}
           icon={
             isWebCam ? (
-              <VideoOff className="w-5 h-5" />
+              <VideoOff className="w-5 h-5 text-white" />
             ) : (
-              <Video className="w-5 h-5" />
+              <Video className="w-5 h-5 text-white" />
             )
           }
           onClick={() => setIsWebCam(!isWebCam)}
+          isActive={isWebCam}
         />
 
         <TooltipButton
           content={isRecording ? "Stop Recording" : "Start Recording"}
           icon={
             isRecording ? (
-              <CircleStop className="w-5 h-5" />
+              <CircleStop className="w-5 h-5 text-red" />
             ) : (
-              <Mic className="w-5 h-5" />
+              <Mic className="w-5 h-5 text-red" />
             )
           }
           onClick={recordUserAnswer}
           disabled={isAiGenerating}
+          isActive={isRecording}
         />
 
         <TooltipButton
           content="Record Again"
-          icon={<RefreshCw className="w-5 h-5" />}
+          icon={<RefreshCw className="w-5 h-5 text-white" />}
           onClick={recordNewAnswer}
           disabled={isAiGenerating}
         />
@@ -302,9 +329,9 @@ export const RecordAnswer = ({
           content="Save Result"
           icon={
             isAiGenerating ? (
-              <Loader className="w-5 h-5 animate-spin" />
+              <Loader className="w-5 h-5 animate-spin text-white" />
             ) : (
-              <Save className="w-5 h-5" />
+              <Save className="w-5 h-5 text-white" />
             )
           }
           onClick={() => setOpen(!open)}
@@ -312,35 +339,19 @@ export const RecordAnswer = ({
         />
       </div>
 
-      <div className="w-full max-w-3xl mt-6 p-6 border border-white/10 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-lg shadow-md shadow-black/20">
-        <h2 className="text-xl font-semibold text-white mb-2">
-          Your Answer
-        </h2>
-
-        <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">
-          {userAnswer || "🎙️ Start recording to see your answer here..."}
-        </p>
-
-        {interimResult && (
-          <p className="text-sm text-gray-400 mt-4">
-            <strong>Current Speech:</strong> {interimResult}
-          </p>
-        )}
-
-        {aiResult && (
-          <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
-            <h3 className="text-lg text-white font-semibold mb-2">
-              AI Feedback
-            </h3>
-            <p className="text-sm text-green-300">
-              <strong>Rating:</strong> {aiResult.ratings}/10
-            </p>
-            <p className="text-sm text-gray-300 mt-2">
-              <strong>Feedback:</strong> {aiResult.feedback}
-            </p>
-          </div>
-        )}
-      </div>
+      {aiResult && (
+              <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
+                <h3 className="text-lg text-white font-semibold mb-2">
+                  AI Feedback
+                </h3>
+                <p className="text-sm text-green-300">
+                  <strong>Rating:</strong> {aiResult.ratings}/10
+                </p>
+                <p className="text-sm text-gray-300 mt-2">
+                  <strong>Feedback:</strong> {aiResult.feedback}
+                </p>
+              </div>
+            )}
     </div>
   );
 };

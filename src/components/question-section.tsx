@@ -37,7 +37,7 @@ export const QuestionSection = ({ questions }: QuestionSectionProps) => {
 
   return (
     <div className="relative border border-white/10 bg-white/5 backdrop-blur-lg rounded-xl p-6 w-full overflow-hidden">
-      {/* Background Glow */}
+      
       <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
 
       <Tabs
@@ -63,30 +63,29 @@ export const QuestionSection = ({ questions }: QuestionSectionProps) => {
 
         {questions?.map((tab, i) => (
           <TabsContent key={i} value={tab.question} className="pt-4">
-            <div className="space-y-4">
-              <p className="text-slate-300 text-lg tracking-wide">{tab.question}</p>
-
-              <div className="flex justify-end">
-                <TooltipButton
-                  content={isPlaying ? "Stop" : "Start"}
-                  icon={
-                    isPlaying ? (
-                      <VolumeX className="w-5 h-5 text-muted-foreground" />
-                    ) : (
-                      <Volume2 className="w-5 h-5 text-muted-foreground" />
-                    )
-                  }
-                  onClick={() => handlePlayQuestion(tab.question)}
-                />
-              </div>
-
-              <RecordAnswer
-                question={tab}
-                isWebCam={isWebCam}
-                setIsWebCam={setIsWebCam}
+          <div className="space-y-4">
+            <p className="text-slate-300 text-lg tracking-wide flex items-center gap-2">
+              {tab.question}
+              <TooltipButton
+                content={isPlaying ? "Stop" : "Start"}
+                icon={
+                  isPlaying ? (
+                    <VolumeX className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Volume2 className="w-5 h-5 text-muted-foreground" />
+                  )
+                }
+                onClick={() => handlePlayQuestion(tab.question)}
               />
-            </div>
-          </TabsContent>
+            </p>
+        
+            <RecordAnswer
+              question={tab}
+              isWebCam={isWebCam}
+              setIsWebCam={setIsWebCam}
+            />
+          </div>
+        </TabsContent>        
         ))}
       </Tabs>
     </div>

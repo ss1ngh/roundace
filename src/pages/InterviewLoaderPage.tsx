@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { Lightbulb, Sparkles, Webcam as WebcamIcon } from "lucide-react";
+import { Lightbulb, Sparkles, Webcam } from "lucide-react";
 import { db } from "../config/firebase.config";
 import { Interview } from "../types/index";
 import { LoaderPage } from "./LoaderPage";
 import { Button } from "../components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
-import { InterviewPin } from "../components/pin";
 import { toast } from "sonner";
+import Navbar from "@/components/Navbar";
 
 export const InterviewLoadPage = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
@@ -16,7 +17,7 @@ export const InterviewLoadPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isWebcamEnabled, setIsWebcamEnabled] = useState(false);
   const [webcamStream, setWebcamStream] = useState<MediaStream | null>(null);
-  const [webcamError, setWebcamError] = useState<string | null>(null); // Track webcam error
+  const [webcamError, setWebcamError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const navigate = useNavigate();
 
@@ -24,20 +25,17 @@ export const InterviewLoadPage = () => {
     const fetchInterview = async () => {
       try {
         if (!interviewId) {
-          console.log("No interviewId provided, navigating to /generate");
           navigate("/generate", { replace: true });
           return;
         }
 
         const interviewDoc = await getDoc(doc(db, "interviews", interviewId));
         if (interviewDoc.exists()) {
-          console.log("Interview fetched:", interviewDoc.data());
           setInterview({
             id: interviewDoc.id,
             ...interviewDoc.data(),
           } as Interview);
         } else {
-          console.log("Interview not found, navigating to /generate");
           navigate("/generate", { replace: true });
         }
       } catch (error) {
@@ -53,7 +51,6 @@ export const InterviewLoadPage = () => {
 
   useEffect(() => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      console.error("getUserMedia not supported in this browser");
       toast.error("Browser Unsupported", {
         description: "Your browser does not support webcam access. Please use Chrome or Edge.",
       });
@@ -66,15 +63,13 @@ export const InterviewLoadPage = () => {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { width: 1280, height: 720, facingMode: "user" },
       });
-      console.log("Native webcam stream accessed:", stream);
       setWebcamStream(stream);
       setIsWebcamEnabled(true);
-      setWebcamError(null); // Clear any previous error
+      setWebcamError(null);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
     } catch (error: any) {
-      console.error("Native webcam error:", error);
       setIsWebcamEnabled(false);
       if (error.name === "NotFoundError") {
         setWebcamError("No webcam device found. You can still proceed with the interview without a webcam.");
@@ -121,75 +116,86 @@ export const InterviewLoadPage = () => {
   }, []);
 
   if (isLoading) {
-    return <LoaderPage />;
+    return <LoaderPage className="w-full h-[70vh]" />;
   }
 
   return (
-    <div className="flex flex-col w-full gap-8 py-5">
-      <div className="flex items-center justify-between w-full gap-2">
-        <div />
-        <Link to={`/generate/interview/${interviewId}/start`}>
-          <Button size="sm">
-            Start <Sparkles className="ml-2" size={16} />
-          </Button>
-        </Link>
+    <div className="max-h-100vh bg-black relative isolate overflow-hidden">
+      <div className="pt-5">
+        <Navbar />
+      </div>
+      <div className="absolute inset-0 -z-10">
+      <div className="absolute left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
+
       </div>
 
-      {interview && <InterviewPin interview={interview} onMockPage />}
-
-      <Alert className="bg-yellow-100/50 border-yellow-200 p-4 rounded-lg flex items-start gap-3 -mt-3">
-        <Lightbulb className="h-5 w-5 text-yellow-600" />
-        <div>
-          <AlertTitle className="text-yellow-800 font-semibold">
-            Important Information
-          </AlertTitle>
-          <AlertDescription className="text-sm text-yellow-700 mt-1">
-            Please enable your webcam and microphone to start the AI-generated
-            mock interview. The interview consists of five questions. You'll
-            receive a personalized report based on your responses at the end.{" "}
-            <br />
-            <br />
-            <span className="font-medium">Note:</span> Your video is{" "}
-            <strong>never recorded</strong>. You can disable your webcam at any
-            time.
-          </AlertDescription>
-        </div>
-      </Alert>
-
-      {webcamError && (
-        <Alert className="bg-red-100/50 border-red-200 p-4 rounded-lg flex items-start gap-3">
-          <Lightbulb className="h-5 w-5 text-red-600" />
+      <div className="relative m-auto max-w-[90rem] px-8 md:px-24 py-12 flex flex-col gap-8">
+        <div className="w-full">
+        <Alert className="bg-white/5 backdrop-blur-lg border border-indigo-500/30 rounded-xl flex items-start gap-3 py-3 px-3">
+          <Lightbulb className="h-5 w-5 text-indigo-400" />
           <div>
-            <AlertTitle className="text-red-800 font-semibold">
-              Webcam Issue
+            <AlertTitle className="text-slate-200 font-bold text-xs">
+              Important Note
             </AlertTitle>
-            <AlertDescription className="text-sm text-red-700 mt-1">
-              {webcamError}
+            <AlertDescription className="text-xs text-slate-400 mt-0.5 leading-tight">
+              Press "🎙️" to begin answering the question.  <strong>Note:</strong> <span className="font-medium">Your video is never recorded.</span> You can disable the webcam anytime if preferred.
             </AlertDescription>
           </div>
         </Alert>
-      )}
-
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="w-full h-[400px] md:w-96 flex flex-col items-center justify-center border p-4 bg-gray-50 rounded-md">
-          {isWebcamEnabled ? (
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="w-full h-full object-cover rounded-md"
-            />
-          ) : (
-            <WebcamIcon className="min-w-24 min-h-24 text-muted-foreground" />
-          )}
         </div>
-      </div>
 
-      <div className="flex items-center justify-center">
-        <Button onClick={toggleWebcam}>
-          {isWebcamEnabled ? "Disable Webcam" : "Enable Webcam"}
-        </Button>
+        {webcamError && (
+          <div className="w-full">
+            <Alert className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl flex items-start gap-3 py-3 px-3 hover:bg-white/10 transition-all">
+              <Lightbulb className="h-5 w-5 text-indigo-400" />
+              <div>
+                <AlertTitle className="text-slate-200 font-semibold text-sm">
+                  Webcam Issue
+                </AlertTitle>
+                <AlertDescription className="text-xs text-slate-400 mt-0.5 leading-tight">
+                  {webcamError}
+                </AlertDescription>
+              </div>
+            </Alert>
+          </div>
+        )}
+
+        <div className="flex flex-col items-center justify-center w-full gap-6 mt-7">
+        <div className="absolute left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
+          <div className="w-full max-w-xs h-[300px] border border-white/10 bg-white/5 backdrop-blur-lg rounded-xl overflow-hidden transition-all">
+            {isWebcamEnabled ? (
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              
+              <div className="w-full h-full flex items-center justify-center bg-[radial-gradient(circle_at_center,_#4f46e5_0%,_transparent_50%)] opacity-20">
+                <Webcam className="h-24 w-24 text-indigo-400/50" />
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-4 mt-8">
+            <button
+              onClick={toggleWebcam}
+              className="text-white/20 border bg-white/20 hover:text-white border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center gap-x-2 transition-all"
+            >
+              <Webcam size={16} />
+              <span className="font-mono text-white">
+                {isWebcamEnabled ? "Disable Webcam" : "Enable Webcam"}
+              </span>
+            </button>
+            <Link to={`/generate/interview/${interviewId}/start`}>
+              <button className="text-white/20 border bg-white/20 hover:text-white border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center gap-x-2 transition-all">
+                <Sparkles size={16} />
+                <span className="font-mono text-white">Start Interview</span>
+              </button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

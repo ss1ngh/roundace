@@ -10,7 +10,7 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import Dashboard from './pages/Dashboard';
 import Generate from './components/generate';
-import CreateInterview from './pages/create-interview';
+import CreateInterview from './pages/Create-interview';
 import { InterviewLoadPage } from './pages/InterviewLoaderPage';
 import { InterviewPage } from './pages/InterviewPage';
 

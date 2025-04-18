@@ -1,4 +1,4 @@
-import Navbar from "@/sections/Navbar";
+import Navbar from "@/components/Navbar";
 import { Interview } from "@/types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -138,7 +138,7 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
           ...data,
           updatedAt: serverTimestamp(),
         });
-        navigate(`/generate/interview/${initialData.id}/load`, { replace: true }); // Navigate to InterviewLoadPage after update
+        navigate(`/generate/interview/${initialData.id}/load`, { replace: true });
       } else {
         const newInterviewRef = await addDoc(collection(db, "interviews"), {
           ...data,
@@ -146,7 +146,7 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
           questions: aiResult,
           createdAt: serverTimestamp(),
         });
-        navigate(`/generate/interview/${newInterviewRef.id}/load`, { replace: true }); // Navigate to InterviewLoadPage after creation
+        navigate(`/generate/interview/${newInterviewRef.id}/load`, { replace: true });
       }
 
       toast(toastMessage.title, { description: toastMessage.description });
@@ -176,24 +176,25 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
   }, [initialData, form]);
 
   return (
-    <div className="min-h-screen bg-black relative isolate overflow-hidden">
+    <div className="min-h-screen bg-black relative isolate overflow-hidden flex flex-col">
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#4f46e5_0%,_transparent_50%)] opacity-30" />
       </div>
 
-      <div className="pt-6">
+      <div className="pt-2">
         <Navbar />
       </div>
 
-      <div className="relative m-auto max-w-[90rem] px-8 md:px-24 py-12">
-        <div className="relative max-w-4xl mx-auto space-y-12">
+      <div className="flex-1 overflow-auto px-6 py-6 md:px-16 md:py-8 max-w-5xl mx-auto w-full">
+        <div className="space-y-6">
           <div className="relative">
-            <div className="absolute -top-4 left-1/4 w-32 h-28 bg-indigo-700 rounded-full blur-3xl" />
-            <div className="absolute -top-4 left-1/3 w-24 h-28 bg-indigo-700 rounded-full blur-3xl" />
-            <h1 className="text-4xl font-semibold text-slate-200 tracking-tight mb-2">
+            <div className="absolute -top-4 left-1/4 -translate-x-1/2 w-32 h-28 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
+            <div className="absolute left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
+
+            <h1 className="text-2xl md:text-3xl font-semibold text-slate-200 tracking-tight mb-2">
               {title}
             </h1>
-            <p className="text-slate-400 text-lg">
+            <p className="text-slate-400 text-sm md:text-base">
               {initialData
                 ? "Update your mock interview details."
                 : "Fill out the details to generate a personalized AI interview."}
@@ -203,13 +204,13 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
           <FormProvider {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="bg-white/5 border border-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-md flex flex-col gap-6"
+              className="bg-white/5 border border-white/10 backdrop-blur-lg p-6 md:p-8 rounded-2xl shadow-md flex flex-col gap-4"
             >
               <FormField
                 control={form.control}
                 name="position"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="space-y-1">
                     <FormLabel className="text-slate-300">Job Position</FormLabel>
                     <FormControl>
                       <Input
@@ -229,7 +230,7 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
                 control={form.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="space-y-1">
                     <FormLabel className="text-slate-300">Description</FormLabel>
                     <FormControl>
                       <Textarea
@@ -249,7 +250,7 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
                 control={form.control}
                 name="experience"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="space-y-1">
                     <FormLabel className="text-slate-300">Experience</FormLabel>
                     <FormControl>
                       <Input
@@ -270,7 +271,7 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
                 control={form.control}
                 name="techStack"
                 render={({ field }) => (
-                  <FormItem className="space-y-2">
+                  <FormItem className="space-y-1">
                     <FormLabel className="text-slate-300">Tech Stack</FormLabel>
                     <FormControl>
                       <Textarea
