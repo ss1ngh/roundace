@@ -23,7 +23,7 @@ const HeroSection = () => {
           </p>
           {isLoaded && isSignedIn ? (
             <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/generate")}
             className="text-white border border-white/30 bg-white/30 hover:bg-white/20 
                       hover:border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center w-fit gap-x-2
                       transition-all"

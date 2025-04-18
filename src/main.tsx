@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { ClerkProvider } from '@clerk/clerk-react'
+import { ToastProvider } from './components/ui/toast.tsx';
 
 
 // Import your publishable key
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <App />
+      <ToastProvider/>
     </ClerkProvider>
   </StrictMode>
 );

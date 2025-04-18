@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import CaretUp from "../icons/caretup";
+import CaretUp from "../../components/icons/caretup";
 
 type Question = {
   id: number;

@@ -6,7 +6,7 @@ const Navbar = () => {
   const {isSignedIn, isLoaded, user} = useUser();
   const navigate = useNavigate();
   return (
-    <nav className="bg-transparent text-gray-200 m-auto flex max-w-[90rem] justify-between items-center px-4 py-1 text-lg/8 font-light">
+    <nav className="bg-transparent text-gray-200 m-auto flex max-w-[90rem] justify-between items-center px-4 text-lg/8 font-light">
         <a href="#" className="flex items-center gap-x-3 font-mono z-10">
             Round Ace
         </a>

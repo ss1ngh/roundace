@@ -2,21 +2,22 @@ import SampleImage from '@/assets/sample-image.jpg';
 
 const Features = () => {
   return (
-    <section id='features' className="relative isolate overflow-hidden">
-      <div className="absolute inset-0 -z-20 rounded-[2rem] border border-white/40" />
-
-      <div
-        className="absolute inset-0 -z-10 rounded-[2rem]"
-        style={{
-          background: 'linear-gradient(to top, #5248e7 10% ,#3f38bc 80%, #8f68f3 100%)',
-        }}
-      />
+    <section id='features' className="relative isolate overflow-hidden bg-black">
+      
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#4f46e5_10%,_transparent_50%)] opacity-30" />
+      </div>
 
       <div className="relative m-auto max-w-[90rem] px-24 py-24 z-10">
-        <h2 className="text-center text-slate-300 text-6xl/normal font-semibold tracking-tighter mb-32">
-          Everything You Need to <br />
-          <span className="text-white">Supercharge </span> Your Interview Prep
-        </h2>
+        
+        <div className="relative">
+          <div className="absolute -top-4 left-1/4 w-32 h-32 bg-indigo-700 rounded-full blur-3xl" />
+          <div className="absolute -top-4 left-1/3 w-32 h-32 bg-indigo-700 rounded-full blur-3xl" />
+          <h2 className="relative text-center text-slate-300 text-6xl/normal font-semibold tracking-tighter mb-32">
+            Everything You Need to <br />
+            <span className="text-white">Supercharge </span> Your Interview Prep
+          </h2>
+        </div>
 
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>

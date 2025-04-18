@@ -1,18 +1,18 @@
 // src/pages/LandingPage.tsx
-import Header from "@/components/header";
-import HeroSection from "@/components/hero-section";
-import Navbar from "@/components/Navbar";
-import Features from "@/components/features";
-import Main from "@/components/main-section";
-import FAQs from "@/components/faqs/FAQs";
+import Header from "@/sections/header";
+import HeroSection from "@/sections/hero-section";
+import Navbar from "@/sections/Navbar";
+import Features from "@/sections/features";
+import Main from "@/sections/main-section";
+import FAQs from "@/sections/faqs/FAQs";
 
 const LandingPage = () => {
   return (
     <div className="min-h-screen relative">
       <div className="relative">
-        <div className="max-w-full mx-auto px-6 py-4">
+        <div className="max-w-full mx-auto px-6 pt-6">
           <Header>
-            <Navbar />
+              <Navbar />
             <HeroSection />
           </Header>
         </div>

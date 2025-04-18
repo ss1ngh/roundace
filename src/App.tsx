@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import { PublicLayout } from '@/layouts/public-layout';
 import AuthenticationLayout from '@/layouts/auth-layout';
@@ -8,19 +8,23 @@ import ProtectRoutes from './layouts/protected-layout';
 import LandingPage from '@/pages/LandingPage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
-import Dashboard from './components/dashboard';
+import Dashboard from './pages/Dashboard';
+import Generate from './components/generate';
+import CreateInterview from './pages/create-interview';
+import { InterviewLoadPage } from './pages/InterviewLoaderPage';
+import { InterviewPage } from './pages/InterviewPage';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[#010215]">
+      <div className="min-h-screen bg-black">
         <Routes>
           {/* public routes */}
           <Route path="/" element={<PublicLayout />}>
             <Route index element={<LandingPage />} />
           </Route>
 
-          {/* authentication routes - outside of public layout */}
+          {/* authentication routes */}
           <Route path="/signin" element={<AuthenticationLayout />}>
             <Route index element={<SignInPage />} />
           </Route>
@@ -31,18 +35,19 @@ function App() {
 
           {/* protected routes */}
           <Route
-            path="/dashboard"
             element={
               <ProtectRoutes>
                 <MainLayout />
               </ProtectRoutes>
             }
           >
-            <Route index element={<Dashboard />} />
+            <Route element={<Generate/>} path="/generate">
+              <Route index element={<Dashboard />} />
+              <Route path=':interviewId' element={<CreateInterview/>} />
+              <Route path='interview/:interviewId/load' element={<InterviewLoadPage/>} />
+              <Route path="interview/:interviewId/start" element={<InterviewPage />}/>
+            </Route>
           </Route>
-
-          {/* redirect unknown routes */}
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </Router>
