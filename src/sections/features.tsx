@@ -1,6 +1,6 @@
 import InstantFeedback from '@/assets/instantfeedback.mp4'
 import uploadJD from '@/assets/uploadJD.mp4'
-import startInterview from '@/assets/startInterview.mp4'
+import startInterview from '@/assets/startInterviews.mp4'
 
 const Features = () => {
   return (

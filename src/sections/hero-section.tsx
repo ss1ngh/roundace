@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react";
 
-import startInterview from '@/assets/startInterview.mp4'
+import startInterview from '@/assets/startInterviews.mp4'
 
 const HeroSection = () => {
   const {isSignedIn, isLoaded} = useUser();
@@ -49,7 +49,7 @@ const HeroSection = () => {
         <video
             src={startInterview} 
             autoPlay muted loop playsInline
-            className='rounded-3xl'
+            className='rounded-3xl '
             />
         </div>
       </div>
