@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react";
 
-import startInterview from '@/assets/startinterview.mp4'
+import startInterview from '@/assets/startInterview.mp4'
 
 const HeroSection = () => {
   const {isSignedIn, isLoaded} = useUser();
