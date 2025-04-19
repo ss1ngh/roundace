@@ -35,7 +35,6 @@ const LandingPage = () => {
       </div>
 
       <div className="relative">
-      <div className="absolute inset-0 -z-10 [background:radial-gradient(125%_125%_at_50%_90%,#000_40%,#63e_100%)]" />
         <div className="max-w-full mx-auto px-6 py-4">
           <Main>
             <Features/>

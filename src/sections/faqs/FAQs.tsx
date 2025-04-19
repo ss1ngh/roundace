@@ -23,7 +23,7 @@ const FAQs = () => {
   return (
     <section id="faqs" className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10 rounded-t-[2rem] 
-              bg-[linear-gradient(to_top,_transparent_50%,_#4f46e5_80%,_#8f68f3_100%)]" />
+              bg-[linear-gradient(to_top,_transparent_50%,_#8b5cf54d_70%,_#8f68f3_100%)]" />
       <div className="w-full max-w-[90rem] py-28">
         <h2 className="text-center text-slate-300 text-6xl/normal font-semibold tracking-tighter mb-4">
           Frequently Asked Questions

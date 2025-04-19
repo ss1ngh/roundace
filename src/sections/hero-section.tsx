@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react"
-import heroImage from "@/assets/sample-image.jpg"
+import InstantFeedback from '@/assets/instantfeedback .mp4';
 import { useNavigate } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react";
 
@@ -10,7 +10,7 @@ const HeroSection = () => {
   return (
     <div className="relative isolate overflow-hidden">
       
-      <div className="absolute inset-0 -z-10 rounded-b-[2rem] bg-[linear-gradient(to_bottom,_transparent_50%,_#4f46e5_80%,_#8f68f3_100%)]" />
+      <div className="absolute inset-0 -z-10 rounded-b-[2rem] bg-[linear-gradient(to_bottom,_transparent_50%,_#8b5cf54d_70%,_#8f68f3_100%)]" />
 
       <div className="m-auto grid max-w-[90rem] grid-cols-[5fr_4fr] items-center gap-x-12 px-24 py-20">
         <div>
@@ -45,11 +45,11 @@ const HeroSection = () => {
         </div>
 
         <div>
-          <img
-            src={heroImage}
-            alt="Sample Image"
-            className="relative max-h-[30rem] justify-self-end rounded-xl"
-          />
+        <video
+            src={InstantFeedback} 
+            autoPlay muted loop playsInline
+            className='rounded-3xl max-h-fit'
+            />
         </div>
       </div>
     </div>

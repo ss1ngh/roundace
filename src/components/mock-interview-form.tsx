@@ -178,7 +178,8 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
   return (
     <div className="min-h-screen bg-black relative isolate overflow-hidden flex flex-col">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#4f46e5_0%,_transparent_50%)] opacity-30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#8b5cf54d_0%,_transparent_40%)] blur-3xl" />
+        {/* <div className="absolute top-[-10%] left-[40%] w-[200px] h-[200px] bg-violet-500/30 blur-2xl rounded-full" /> */}
       </div>
 
       <div className="pt-2">
@@ -188,9 +189,6 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
       <div className="flex-1 overflow-auto px-6 py-6 md:px-16 md:py-8 max-w-5xl mx-auto w-full">
         <div className="space-y-6">
           <div className="relative">
-            <div className="absolute -top-4 left-1/4 -translate-x-1/2 w-32 h-28 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
-            <div className="absolute left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-700 rounded-full blur-3xl opacity-20 -z-10" />
-
             <h1 className="text-2xl md:text-3xl font-semibold text-slate-200 tracking-tight mb-2">
               {title}
             </h1>

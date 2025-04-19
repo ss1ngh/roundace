@@ -1,18 +1,18 @@
-import SampleImage from '@/assets/sample-image.jpg';
+import InstantFeedback from '@/assets/instantfeedback .mp4'
 
 const Features = () => {
   return (
     <section id='features' className="relative isolate overflow-hidden bg-black">
       
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#4f46e5_10%,_transparent_50%)] opacity-30" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#8b5cf54d_0%,_transparent_40%)] blur-3xl" />
       </div>
 
       <div className="relative m-auto max-w-[90rem] px-24 py-24 z-10">
         
         <div className="relative">
-          <div className="absolute -top-4 left-1/4 w-32 h-32 bg-indigo-700 rounded-full blur-3xl" />
-          <div className="absolute -top-4 left-1/3 w-32 h-32 bg-indigo-700 rounded-full blur-3xl" />
+          <div className="absolute -bottom-4 left-1/4 w-32 h-32 bg-violet-500/30 rounded-full blur-2xl" />
+          <div className="absolute -bottom-4 left-1/3 w-32 h-32 bg-violet-500/30 rounded-full blur-2xl" />
           <h2 className="relative text-center text-slate-300 text-6xl/normal font-semibold tracking-tighter mb-32">
             Everything You Need to <br />
             <span className="text-white">Supercharge </span> Your Interview Prep
@@ -21,10 +21,10 @@ const Features = () => {
 
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>
-            <img
-              src={SampleImage}
-              className="relative max-h-[45rem] rounded-xl"
-              alt="Real-Time Feedback"
+            <video
+            src={InstantFeedback} 
+            autoPlay muted loop playsInline
+            className='rounded-3xl max-h-fit'
             />
           </figure>
           <div className="max-w-lg justify-self-end">
@@ -43,20 +43,20 @@ const Features = () => {
             </p>
           </div>
           <figure>
-            <img
-              src={SampleImage}
-              className="relative max-h-[50rem] rounded-xl"
-              alt="Upload JD"
+          <video
+            src={InstantFeedback} 
+            autoPlay muted loop playsInline
+            className='rounded-3xl max-h-fit'
             />
           </figure>
         </div>
 
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>
-            <img
-              src={SampleImage}
-              className="relative max-h-[45rem] rounded-xl"
-              alt="Mock Interview"
+          <video
+            src={InstantFeedback} 
+            autoPlay muted loop playsInline
+            className='rounded-3xl max-h-fit'
             />
           </figure>
           <div className="max-w-lg justify-self-end">

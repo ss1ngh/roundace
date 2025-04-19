@@ -57,9 +57,8 @@ export const Dashboard = () => {
     <div className="min-h-screen bg-black relative isolate overflow-hidden">
       
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#6366f1_0%,_transparent_40%)] opacity-30 blur-2xl" />
-        <div className="absolute top-[-10%] left-[20%] w-[300px] h-[300px] bg-indigo-500/30 blur-3xl rounded-full" />
-        <div className="absolute bottom-[-10%] right-[15%] w-[240px] h-[240px] bg-violet-500/30 blur-3xl rounded-full" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#8b5cf54d_0%,_transparent_40%)] blur-3xl" />
+        <div className="absolute top-[-10%] left-[40%] w-[200px] h-[200px] bg-violet-500/30 blur-2xl rounded-full" />
       </div>
 
       <div className="pt-6">
