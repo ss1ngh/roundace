@@ -6,14 +6,14 @@ import { Lightbulb, Sparkles, Webcam } from "lucide-react";
 import { db } from "../config/firebase.config";
 import { Interview } from "../types/index";
 import { LoaderPage } from "./LoaderPage";
-import { Button } from "../components/ui/button";
+
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 
 export const InterviewLoadPage = () => {
   const { interviewId } = useParams<{ interviewId: string }>();
-  const [interview, setInterview] = useState<Interview | null>(null);
+  const [,setInterview] = useState<Interview | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isWebcamEnabled, setIsWebcamEnabled] = useState(false);
   const [webcamStream, setWebcamStream] = useState<MediaStream | null>(null);

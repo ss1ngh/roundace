@@ -70,7 +70,7 @@ export const InterviewPin = ({
               content="View"
               buttonVariant="ghost"
               onClick={() => navigate(`/generate/${interview.id}`, { replace: true })}
-              disbaled={false}
+              disabled={false}
               buttonClassName="hover:text-sky-500"
               icon={<Eye />}
               loading={false}
@@ -79,7 +79,7 @@ export const InterviewPin = ({
               content="Feedback"
               buttonVariant="ghost"
               onClick={() => navigate(`/generate/feedback/${interview.id}`, { replace: true })}
-              disbaled={false}
+              disabled={false}
               buttonClassName="hover:text-yellow-500"
               icon={<Newspaper />}
               loading={false}
@@ -88,7 +88,7 @@ export const InterviewPin = ({
               content="Start"
               buttonVariant="ghost"
               onClick={() => navigate(`/generate/interview/${interview.id}`, { replace: true })}
-              disbaled={false}
+              disabled={false}
               buttonClassName="hover:text-violet-500"
               icon={<Sparkles />}
               loading={false}

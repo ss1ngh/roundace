@@ -5,7 +5,7 @@ import { useUser } from "@clerk/clerk-react";
 import startInterview from '@/assets/startInterview.mp4'
 
 const HeroSection = () => {
-  const {isSignedIn, isLoaded, user} = useUser();
+  const {isSignedIn, isLoaded} = useUser();
   const navigate = useNavigate();
 
   return (
