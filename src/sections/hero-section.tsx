@@ -1,7 +1,8 @@
 import { ArrowRight } from "lucide-react"
-import InstantFeedback from '@/assets/instantfeedback .mp4';
 import { useNavigate } from "react-router-dom"
 import { useUser } from "@clerk/clerk-react";
+
+import startInterview from '@/assets/startInterview.mp4'
 
 const HeroSection = () => {
   const {isSignedIn, isLoaded, user} = useUser();
@@ -46,9 +47,9 @@ const HeroSection = () => {
 
         <div>
         <video
-            src={InstantFeedback} 
+            src={startInterview} 
             autoPlay muted loop playsInline
-            className='rounded-3xl max-h-fit'
+            className='rounded-3xl'
             />
         </div>
       </div>

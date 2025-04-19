@@ -1,11 +1,13 @@
-import InstantFeedback from '@/assets/instantfeedback .mp4'
+import InstantFeedback from '@/assets/instantfeedback.mp4'
+import uploadJD from '@/assets/uploadJD.mp4'
+import startInterview from '@/assets/startInterview.mp4'
 
 const Features = () => {
   return (
     <section id='features' className="relative isolate overflow-hidden bg-black">
       
       <div className="absolute inset-0 -z-10">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#8b5cf54d_0%,_transparent_40%)] blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#8b5cf54d_0%,_transparent_40%)] blur-3xl" />
       </div>
 
       <div className="relative m-auto max-w-[90rem] px-24 py-24 z-10">
@@ -21,11 +23,13 @@ const Features = () => {
 
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>
-            <video
-            src={InstantFeedback} 
-            autoPlay muted loop playsInline
-            className='rounded-3xl max-h-fit'
-            />
+            <div className="video-container">
+              <video
+                src={InstantFeedback} 
+                autoPlay muted loop playsInline
+                className="rounded-3xl"
+              />
+            </div>
           </figure>
           <div className="max-w-lg justify-self-end">
             <p className="text-slate-200 mb-12 text-4xl/8 font-semibold tracking-tighter">Real-Time Feedback</p>
@@ -43,21 +47,25 @@ const Features = () => {
             </p>
           </div>
           <figure>
-          <video
-            src={InstantFeedback} 
-            autoPlay muted loop playsInline
-            className='rounded-3xl max-h-fit'
-            />
+            <div className="video-container">
+              <video
+                src={uploadJD} 
+                autoPlay muted loop playsInline
+                className="rounded-3xl"
+              />
+            </div>
           </figure>
         </div>
 
         <div className="grid grid-cols-2 items-center mb-20 gap-x-16">
           <figure>
-          <video
-            src={InstantFeedback} 
-            autoPlay muted loop playsInline
-            className='rounded-3xl max-h-fit'
-            />
+            <div className="video-container">
+              <video
+                src={startInterview} 
+                autoPlay muted loop playsInline
+                className="rounded-3xl"
+              />
+            </div>
           </figure>
           <div className="max-w-lg justify-self-end">
             <p className="text-slate-200 mb-12 text-4xl/8 font-semibold tracking-tighter">Start your mock interview instantly</p>
