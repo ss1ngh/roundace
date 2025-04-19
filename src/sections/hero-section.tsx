@@ -45,7 +45,7 @@ const HeroSection = () => {
           )}
         </div>
 
-        <div>
+        <div className="video-container">
         <video
             src={startInterview} 
             autoPlay muted loop playsInline
