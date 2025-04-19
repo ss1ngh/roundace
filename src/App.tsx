@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { PublicLayout } from '@/layouts/public-layout';
 import AuthenticationLayout from '@/layouts/auth-layout';
@@ -10,7 +10,6 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import Dashboard from './pages/Dashboard';
 import Generate from './components/generate';
-import CreateInterview from './pages/Create-interview';
 import { InterviewLoadPage } from './pages/InterviewLoaderPage';
 import { InterviewPage } from './pages/InterviewPage';
 
@@ -41,11 +40,10 @@ function App() {
               </ProtectRoutes>
             }
           >
-            <Route element={<Generate/>} path="/generate">
+            <Route element={<Generate />} path="/generate">
               <Route index element={<Dashboard />} />
-              <Route path=':interviewId' element={<CreateInterview/>} />
-              <Route path='interview/:interviewId/load' element={<InterviewLoadPage/>} />
-              <Route path="interview/:interviewId/start" element={<InterviewPage />}/>
+              <Route path="interview/:interviewId/load" element={<InterviewLoadPage />} />
+              <Route path="interview/:interviewId/start" element={<InterviewPage />} />
             </Route>
           </Route>
         </Routes>

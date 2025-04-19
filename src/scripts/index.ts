@@ -13,17 +13,21 @@ const model = "gemini-2.5-pro-exp-03-25"
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const generateAIContent = async (prompt: string, retries = 3): Promise<string> => {
-  // Mock mode for testing
+  // Mock mode for testing (avoid predefined questions)
   const isMock = import.meta.env.VITE_MOCK_API === 'true';
   if (isMock) {
     console.log('Using mocked AI response');
-    return JSON.stringify([
-      { question: 'What is React?', answer: 'React is a JavaScript library for building user interfaces.' },
-      { question: 'Explain useEffect.', answer: 'useEffect is a React hook for handling side effects.' },
-      { question: 'What is TypeScript?', answer: 'TypeScript is a typed superset of JavaScript.' },
-      { question: 'What is Node.js?', answer: 'Node.js is a runtime for executing JavaScript server-side.' },
-      { question: 'What is a closure?', answer: 'A closure is a function that retains access to its lexical scope.' },
-    ]);
+    // Simulate random questions based on prompt context
+    const techStackMatch = prompt.match(/Tech Stacks: (.*?)(?:\n|$)/)?.[1] || 'JavaScript';
+    const questionTypes = ['coding', 'system design', 'behavioral', 'algorithmic'];
+    const questions = Array.from({ length: 5 }, (_, i) => {
+      const type = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+      return {
+        question: `Random ${type} question about ${techStackMatch} #${i + 1}`,
+        answer: `Detailed answer for a ${type} question related to ${techStackMatch}.`,
+      };
+    });
+    return JSON.stringify(questions);
   }
 
   try {
@@ -51,7 +55,7 @@ export const generateAIContent = async (prompt: string, retries = 3): Promise<st
     }
 
     if (!responseText) {
-      throw new Error('Empty response from API');
+      throw new Error("Empty response from API");
     }
 
     return responseText;
@@ -71,5 +75,45 @@ export const generateAIContent = async (prompt: string, retries = 3): Promise<st
     }
 
     throw new Error(error?.message || 'Failed to generate AI content. Rate limit may have been exceeded.');
+  }
+};
+
+export const parseJobDescription = async (jobDescription: string): Promise<{
+  position: string;
+  description: string;
+  experience: number;
+  techStack: string;
+}> => {
+  const prompt = `
+    As an experienced prompt engineer, analyze the following job description and extract the following details in a JSON object:
+    - position: The job title (e.g., "Frontend Developer")
+    - description: A summary of the role and responsibilities (100-500 characters)
+    - experience: The number of years of experience required (extract a number, default to 0 if not specified)
+    - techStack: A comma-separated list of technologies mentioned (e.g., "React, TypeScript, Node.js")
+
+    Job Description:
+    ${jobDescription}
+
+    Format the output strictly as a JSON object without any additional labels, code blocks, or explanations. Return only the JSON object.
+    Example:
+    {
+      "position": "Frontend Developer",
+      "description": "Develop and maintain web applications using React and TypeScript.",
+      "experience": 3,
+      "techStack": "React, TypeScript, Node.js"
+    }
+  `;
+
+  try {
+    const aiResult = await generateAIContent(prompt);
+    let cleanText = aiResult.trim().replace(/(json|`)/g, "");
+    const jsonObjectMatch = cleanText.match(/\{.*\}/s);
+    if (!jsonObjectMatch) {
+      throw new Error("No JSON object found in response");
+    }
+    return JSON.parse(jsonObjectMatch[0]);
+  } catch (error) {
+    console.error("Error parsing job description:", error);
+    throw new Error("Failed to parse job description. Please try again.");
   }
 };

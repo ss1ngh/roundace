@@ -1,18 +1,34 @@
-import { Plus, Calendar } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Plus, Calendar, Upload, Trash2 } from "lucide-react";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { useAuth } from "@clerk/clerk-react";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebase.config";
 import { Interview } from "../types";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
+const FormMockInterview = lazy(() => import("@/components/mock-interview-form"));
 
 export const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [interviewToDelete, setInterviewToDelete] = useState<string | null>(null);
   const { userId } = useAuth();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -49,13 +65,59 @@ export const Dashboard = () => {
     navigate(`/generate/interview/${interviewId}/load`);
   };
 
+  const handleNewInterview = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleDeleteInterview = async () => {
+    if (!interviewToDelete) return;
+
+    try {
+      await deleteDoc(doc(db, "interviews", interviewToDelete));
+      toast.success("Deleted!", { description: "Interview deleted successfully." });
+      setInterviewToDelete(null);
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      console.error("Error deleting interview:", error);
+      toast.error("Error", { description: "Failed to delete interview. Try again." });
+    }
+  };
+
+  const handleOpenDeleteDialog = (interviewId: string) => {
+    setInterviewToDelete(interviewId);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setInterviewToDelete(null);
+    setIsDeleteDialogOpen(false);
+  };
+
   const stats = [
     { icon: Calendar, label: "Total Interviews", value: interviews.length },
   ];
 
   return (
     <div className="min-h-screen bg-black relative isolate overflow-hidden">
-      
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#8b5cf54d_0%,_transparent_40%)] blur-3xl" />
         <div className="absolute top-[-10%] left-[40%] w-[200px] h-[200px] bg-violet-500/30 blur-2xl rounded-full" />
@@ -79,14 +141,15 @@ export const Dashboard = () => {
                 Track and manage your AI mock interviews
               </p>
             </div>
-            <Link to="/generate/create">
-              <button className="text-white/20 border bg-white/20 hover:text-white
-                  border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center gap-x-2
-                  transition-all mt-4">
-                <Plus size={12} />
-                <span className="font-mono text-white">New Interview</span>
-              </button>
-            </Link>
+            <Button
+              onClick={handleNewInterview}
+              className="text-white/20 border bg-white/20 hover:text-white
+                border-white/10 backdrop-blur-lg rounded-xl px-4 py-2 flex items-center gap-x-2
+                transition-all mt-4"
+            >
+              <Plus size={12} />
+              <span className="font-mono text-white">New Interview</span>
+            </Button>
           </div>
         </div>
 
@@ -129,20 +192,31 @@ export const Dashboard = () => {
             {interviews.map((interview) => (
               <div
                 key={interview.id}
-                onClick={() => handleInterviewClick(interview.id)}
                 className="border border-white/10 bg-white/5 backdrop-blur-lg rounded-xl p-6
-                  hover:bg-white/10 transition-all cursor-pointer"
+                  hover:bg-white/10 transition-all cursor-pointer relative"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-slate-200 font-semibold">
-                    {interview.position}
-                  </h3>
-                  <span className="px-3 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">
-                    {interview.experience}+ YOE
-                  </span>
+                <div
+                  onClick={() => handleInterviewClick(interview.id)}
+                  className="mb-4"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-slate-200 font-semibold">
+                      {interview.position}
+                    </h3>
+                    <span className="px-2 py-0.5 rounded-full text-xs bg-blue-500/20 text-blue-400">
+                      {interview.experience}+ YOE
+                    </span>
+                  </div>
+                  <p className="text-slate-400 text-sm">{interview.techStack}</p>
                 </div>
-                <p className="text-slate-400 text-sm mb-4">{interview.techStack}</p>
                 <div className="h-2 bg-white/10 rounded-full" />
+                <button
+                  onClick={() => handleOpenDeleteDialog(interview.id)}
+                  className="absolute top-4 right-4 text-white/40 hover:text-white"
+                  aria-label="Delete interview"
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
             ))}
           </div>
@@ -157,6 +231,72 @@ export const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* file upload */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="bg-white/5 backdrop-blur-lg border border-indigo-500/30 rounded-xl text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-slate-200">Upload Job Description</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            {!selectedFile ? (
+              <>
+                <p className="text-slate-400 text-sm">
+                  Please upload a .txt or .pdf file containing the job description.
+                </p>
+                <Button
+                  onClick={handleUploadClick}
+                  className="bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-400 border border-indigo-500/50 rounded-lg flex items-center gap-2"
+                >
+                  <Upload size={16} />
+                  Upload File
+                </Button>
+                <input
+                  type="file"
+                  accept=".txt,.pdf"
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                  className="hidden"
+                />
+              </>
+            ) : (
+              <Suspense fallback={<div className="text-slate-400">Loading...</div>}>
+                <FormMockInterview
+                  initialData={null}
+                  file={selectedFile}
+                  onComplete={handleDialogClose}
+                />
+              </Suspense>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="bg-white/5 backdrop-blur-lg border border-indigo-500/30 rounded-xl text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-slate-200">Delete Interview</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Are you sure you want to delete this interview? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              onClick={handleCloseDeleteDialog}
+              className="bg-white/10 hover:bg-white/20 text-slate-200 border border-white/10"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDeleteInterview}
+              className="bg-white-500/20 hover:bg-red-500/30 text-white-400 border border-white-500/50"
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

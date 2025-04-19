@@ -6,9 +6,9 @@ export interface User {
   email: string;
   imageUrl: string;
   createdAt: Timestamp | FieldValue;
-  updateAt: Timestamp | FieldValue;
+  updatedAt: Timestamp | FieldValue;
 }
-  
+
 export interface Interview {
   id: string;
   position: string;
@@ -18,9 +18,9 @@ export interface Interview {
   techStack: string;
   questions: { question: string; answer: string }[];
   createdAt: Timestamp;
-  updateAt: Timestamp;
+  updatedAt: Timestamp; 
 }
-  
+
 export interface UserAnswer {
   id: string;
   mockIdRef: string;
@@ -31,5 +31,5 @@ export interface UserAnswer {
   rating: number;
   userId: string;
   createdAt: Timestamp;
-  updateAt: Timestamp;
+  updatedAt: Timestamp; 
 }
