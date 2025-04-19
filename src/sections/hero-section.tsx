@@ -45,11 +45,11 @@ const HeroSection = () => {
           )}
         </div>
 
-        <div className="video-container">
+        <div>
         <video
             src={startInterview} 
             autoPlay muted loop playsInline
-            className='rounded-3xl '
+            className='rounded-3xl max-h-fit'
             />
         </div>
       </div>
